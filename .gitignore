@@ -1,0 +1,21 @@
+# 二进制产物
+harness
+harness.exe
+bin/
+dist/
+
+# 测试与覆盖率
+*.out
+*.test
+coverage.*
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store
+
+# 环境
+.env
+.env.local

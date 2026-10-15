@@ -18,7 +18,7 @@ func EmitControl(format string, args ...any) {
 
 // EmitBanner 打印启动 banner（控制层）。
 func EmitBanner(version string) {
-	EmitControl("✦ Harness v%s", version)
+	EmitControl("✦ KA Harness v%s", version)
 }
 
 // ContentWriter 返回一个行缓冲的内容层 writer，调用方必须 defer Flush。

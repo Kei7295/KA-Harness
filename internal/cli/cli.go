@@ -42,9 +42,9 @@ func Main() {
 }
 
 func printUsage() {
-	fmt.Fprintln(os.Stdout, `usage: harness [--version] [--help] <command> ...
+	fmt.Fprintln(os.Stdout, `usage: ka-harness [--version] [--help] <command> ...
 
-Project Harness — AI Agent engineering framework
+KA Harness — AI Agent engineering framework
 
 commands:
   run <task>   Run a task in natural language

@@ -58,6 +58,7 @@ func cmdRun(argv []string) {
 	fs := flag.NewFlagSet("run", flag.ExitOnError)
 	_ = fs.Bool("allow-write-in-ci", false,
 		"Allow write operations in non-TTY/CI (not recommended for interactive use)")
+	modelType := fs.String("model", "stub", "Model backend: stub | openai")
 	if err := fs.Parse(argv); err != nil {
 		os.Exit(64)
 	}
@@ -65,7 +66,21 @@ func cmdRun(argv []string) {
 
 	events.EmitBanner(version)
 
-	m := model.NewStubModel()
+	var m model.Model
+	switch *modelType {
+	case "openai":
+		om, err := model.NewOpenAIModel()
+		if err != nil {
+			events.EmitControl("✗  harness: 模型初始化失败")
+			events.EmitControl("   影响：无法执行任务")
+			events.EmitControl("   下一步：检查 KA_API_KEY / KA_BASE_URL 环境变量")
+			os.Exit(70) // EX_SOFTWARE
+		}
+		m = om
+	default:
+		m = model.NewStubModel()
+	}
+
 	o := orchestrator.New(m)
 	code := o.Run(task)
 	os.Exit(code)

@@ -1,5 +1,7 @@
 # KA Harness
 
+<img src="assets/logo.png" alt="KA Harness" width="120" align="left" />
+
 > AI Agent engineering framework — Model + Harness = Agent
 
 KA Harness 负责模型之外的一切工程化支撑：接入层、编排循环、工具系统、权限网关、可观测性。

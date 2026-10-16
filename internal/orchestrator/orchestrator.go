@@ -83,12 +83,20 @@ func (o *Orchestrator) Run(task string) int {
 				return 70
 			}
 
+			// 把工具调用 + 结果完整喂回模型（真正的 ReAct）
+			history = append(history, fmt.Sprintf("我调用了工具 %s，参数: %v", resp.ToolCall.Name, resp.ToolCall.Arguments))
+
 			if !result.OK {
 				events.EmitControl("  ✗ %s: %s", result.Error.Code, result.Error.Message)
-				history = append(history, fmt.Sprintf("tool %s failed: %s", resp.ToolCall.Name, result.Error.Code))
+				history = append(history, fmt.Sprintf("工具执行失败，错误码 %s: %s", result.Error.Code, result.Error.Message))
 			} else {
+				// 截断长输出，避免 context 爆炸
+				output := result.Data.Body
+				if len(output) > 2000 {
+					output = output[:2000] + "\n... (truncated)"
+				}
 				events.EmitControl("  ✓ 完成（%d bytes）", len(result.Data.Body))
-				history = append(history, fmt.Sprintf("tool %s → ok, %d bytes", resp.ToolCall.Name, len(result.Data.Body)))
+				history = append(history, fmt.Sprintf("工具输出:\n%s", output))
 			}
 			continue
 		}
